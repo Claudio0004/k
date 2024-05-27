@@ -7,7 +7,7 @@
 		response.sendRedirect("./home?page=Home.jsp");	
 		return;
 	}
-%> 
+%>
 <!DOCTYPE html>
 <html>
 <head>

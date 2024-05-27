@@ -30,19 +30,23 @@ public class CatalogoServlet extends HttpServlet {
 	
 		try {
 			if(action!=null) {
-				if(action.equalsIgnoreCase("add")) {
-					bean.setNome(request.getParameter("nome"));
-					bean.setDescrizione(request.getParameter("descrizione"));
-					bean.setIva(request.getParameter("iva"));
-					bean.setPrezzo(Double.parseDouble(request.getParameter("prezzo")));
-					bean.setQuantità(Integer.parseInt(request.getParameter("quantità")));
-					bean.setPiattaforma(request.getParameter("piattaforma"));
-					bean.setGenere(request.getParameter("genere"));
-					bean.setImmagine(request.getParameter("img"));
-					bean.setDataUscita(request.getParameter("dataUscita"));
-					bean.setDescrizioneDettagliata(request.getParameter("descDett"));
-					bean.setInVendita(true);
-					prodDao.doSave(bean);
+				if(action.equalsIgnoreCase("add")){
+					try {
+						bean.setNome(validate((request.getParameter("nome"))));
+						bean.setDescrizione(validate(request.getParameter("descrizione")));
+						bean.setIva(validate(request.getParameter("iva")));
+						bean.setPrezzo(Double.parseDouble(request.getParameter("prezzo")));
+						bean.setQuantità(Integer.parseInt(request.getParameter("quantità")));
+						bean.setPiattaforma(validate(request.getParameter("piattaforma")));
+						bean.setGenere(validate(request.getParameter("genere")));
+						bean.setImmagine(validate(request.getParameter("img")));
+						bean.setDataUscita(validate(request.getParameter("dataUscita")));
+						bean.setDescrizioneDettagliata(validate(request.getParameter("descDett")));
+						bean.setInVendita(true);
+						prodDao.doSave(bean);
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
 				}
 				
 				else if(action.equalsIgnoreCase("modifica")) {
@@ -88,5 +92,13 @@ public class CatalogoServlet extends HttpServlet {
 			throws ServletException, IOException {
 		doGet(request, response);
 	}
-
+	
+	private String validate(String field) throws Exception{
+		if(field.contains("<")||field.contains(">")) {
+			throw new Exception("Invalid value for form field");
+		}
+		
+		else
+			return field;
+	}
 }
